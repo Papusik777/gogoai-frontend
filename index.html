@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🐰 GoGoAI Crypto News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .news-item, .analytics-item {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: orange;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🐰 GoGoAI Crypto News</h1>
+
+    <h2>Premium Analytics</h2>
+    <div id="analytics"></div>
+
+    <h2>Latest News</h2>
+    <div id="news"></div>
+
+    <h2>AI Verify News</h2>
+    <textarea id="verifyText" rows="4" cols="50" placeholder="Enter news text to verify..."></textarea><br>
+    <button onclick="verifyNews()">Verify</button>
+    <div class="result" id="verifyResult"></div>
+
+    <script>
+        const backendUrl = 'https://gogoai-backend-1.onrender.com';
+
+        // Load analytics
+        fetch(`${backendUrl}/api/analytics`)
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('analytics');
+                for (const [key, value] of Object.entries(data)) {
+                    container.innerHTML += `<div class="analytics-item"><strong>${key.toUpperCase()}:</strong> ${value}</div>`;
+                }
+            });
+
+        // Load news
+        fetch(`${backendUrl}/api/news`)
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('news');
+                data.forEach(item => {
+                    container.innerHTML += `
+                        <div class="news-item">
+                            <h3>${item.title}</h3>
+                            <p>${item.description}</p>
+                            <p>Status: ${item.aiStatus}</p>
+                        </div>
+                    `;
+                });
+            });
+
+        // Verify
+        function verifyNews() {
+            const text = document.getElementById('verifyText').value;
+            document.getElementById('verifyResult').innerText = "Processing...";
+            fetch(`${backendUrl}/api/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('verifyResult').innerText = data.result;
+            })
+            .catch(() => {
+                document.getElementById('verifyResult').innerText = "Error contacting AI.";
+            });
+        }
+    </script>
+
+</body>
+</html>
