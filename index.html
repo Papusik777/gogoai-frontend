@@ -1,50 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>GoGoAI Crypto News</title>
-    <style>
-        body { font-family: Arial; margin: 0 auto; max-width: 800px; padding: 20px; background: #f9f9f9; }
-        .card { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-        h1 { text-align: center; }
-    </style>
+  <meta charset="UTF-8">
+  <title>GoGoAI Crypto News</title>
+  <style>
+    body { font-family: Arial; margin: 0 auto; max-width: 800px; padding: 20px; background: #f9f9f9; }
+    .card { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    h1 { text-align: center; }
+  </style>
 </head>
 <body>
-<h1>🐰 GoGoAI Crypto News</h1>
+  <h1>🐰 GoGoAI Crypto News</h1>
 
-<h2>Premium Analytics</h2>
-<div id="analytics"></div>
+  <h2>Premium Analytics</h2>
+  <div id="analytics"></div>
 
-<h2>Latest News</h2>
-<div id="news"></div>
+  <h2>Latest News</h2>
+  <div id="news"></div>
 
-<script>
-const backendUrl = "https://gogoai-backend-1.onrender.com"; // обязательно поправь на актуальный твой URL backend
+  <script>
+    // замените на URL вашего backend
+    const backendUrl = "https://gogoai-backend-1.onrender.com";
 
-fetch(backendUrl + "/api/analytics")
-  .then(res => res.json())
-  .then(data => {
-    let html = "";
-    for (let key in data) {
-      html += `<div class='card'><b>${key.toUpperCase()}:</b> ${data[key]}</div>`;
-    }
-    document.getElementById("analytics").innerHTML = html;
-  });
+    // Загрузка аналитики
+    fetch(`${backendUrl}/api/analytics`)
+      .then(res => res.json())
+      .then(data => {
+        let html = "";
+        for (let key in data) {
+          html += `<div class="card"><b>${key.toUpperCase()}:</b> ${data[key]}</div>`;
+        }
+        document.getElementById("analytics").innerHTML = html;
+      });
 
-fetch(backendUrl + "/api/news")
-  .then(res => res.json())
-  .then(news => {
-    let html = "";
-    news.forEach(n => {
-      html += `<div class='card'>
-        <h3>${n.title}</h3>
-        <p>${n.description}</p>
-        <p>Status: ${n.aiStatus}</p>
-      </div>`;
-    });
-    document.getElementById("news").innerHTML = html;
-  });
-</script>
-
+    // Загрузка новостей
+    fetch(`${backendUrl}/api/news`)
+      .then(res => res.json())
+      .then(news => {
+        let html = "";
+        news.forEach(n => {
+          html += `
+            <div class="card">
+              <h3>${n.title}</h3>
+              <p>${n.description}</p>
+              <p>Status: ${n.aiStatus}</p>
+            </div>
+          `;
+        });
+        document.getElementById("news").innerHTML = html;
+      });
+  </script>
 </body>
 </html>
